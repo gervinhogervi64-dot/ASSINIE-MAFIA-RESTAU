@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catalogue Assinie Mafia</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --accent: #e67e22;
+            --bg: #fdfaf6;
+            --success: #27ae60;
+            --warning: #d35400;
+            --danger: #e74c3c;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding-bottom: 140px;
+            background-color: var(--bg);
+            color: var(--primary);
+        }
+
+        .marquee-container {
+            background: var(--warning);
+            color: white;
+            padding: 10px 0;
+            font-weight: bold;
+            overflow: hidden;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .marquee-text {
+            display: inline-block;
+            white-space: nowrap;
+            animation: marquee 25s linear infinite;
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+
+        header {
+            text-align: center;
+            padding: 60px 20px;
+            /* Image par défaut si le JS met du temps à charger */
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1000&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            border-bottom: 5px solid var(--accent);
+            transition: background 0.5s ease-in-out;
+        }
+
+        .container { max-width: 800px; margin: auto; padding: 10px; }
+
+        .no-refund {
+            background: #fff;
+            border: 3px solid var(--danger);
+            color: var(--danger);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 900;
+            font-size: 1.2rem;
+            margin: 20px 0;
+            text-transform: uppercase;
+        }
+
+        .collapsible {
+            background-color: white;
+            color: var(--primary);
+            cursor: pointer;
+            padding: 18px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-left: 5px solid var(--accent);
+            margin-top: 10px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .active, .collapsible:hover { background-color: #f1f1f1; }
+
+        .collapsible:after { content: '\002B'; color: var(--accent); font-weight: bold; font-size: 20px; }
+        .active:after { content: "\2212"; }
+
+        .content {
+            padding: 0 10px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            background-color: transparent;
+        }
+
+        .card {
+            display: flex;
+            align-items: center;
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 12px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .info { flex: 1; }
+        .info b { display: block; font-size: 0.95rem; color: #333; }
+        .price { color: var(--accent); font-weight: bold; }
+
+        .qty-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #f1f2f6;
+            padding: 5px 12px;
+            border-radius: 30px;
+        }
+
+        .btn-qty {
+            background: var(--primary);
+            color: white;
+            border: none;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .qty-val { font-weight: bold; min-width: 15px; text-align: center; }
+
+        .order-bar {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: white;
+            padding: 20px;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.15);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1001;
+            box-sizing: border-box;
+        }
+
+        .btn-validate {
+            background: var(--success);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .payment-box {
+            background: #fff;
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .phone-num {
+            color: #000;
+            font-weight: 900;
+            font-size: 1.1rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="marquee-container">
+    <div class="marquee-text">
+        🛵 LIVRAISON : Dès 2 500 F — COMMANDE VALIDÉE APRÈS PAIEMENT — AUCUN REMBOURSEMENT POSSIBLE — WAVE/MOOV : 0101300528 — ORANGE : 0788747766
+    </div>
+</div>
+
+<header id="dynamic-header">
+    <h1 style="text-shadow: 2px 2px 4px rgba(0,0,0,0.8);">🌴 ASSINIE MAFIA</h1>
+    <p style="text-shadow: 1px 1px 2px rgba(0,0,0,0.8); font-weight: bold;">Menu interactif et commande WhatsApp</p>
+</header>
+
+<div class="container">
+
+    <div class="no-refund">
+        ⚠️ AUCUN REMBOURSEMENT N'EST POSSIBLE APRÈS AVOIR PASSÉ UNE COMMANDE ET PAYÉ PAR TRANSACTION.
+    </div>
+
+    <!-- ENTRÉES -->
+    <button class="collapsible">🥗 ENTRÉES</button>
+    <div class="content">
+        <div class="card"><div class="info"><b>Salade composée (Poulet/Thon)</b><span class="price">5 000 F</span></div><div class="qty-controls"><button class="btn-qty" onclick="changeQty('Salade-composée', 5000, -1)">-</button><span class="qty-val" id="qty-Salade-composée">0</span><button class="btn-qty" onclick="changeQty('Salade-composée', 5000, 1)">+</button></div></div>
+        <div class="card"><div class="info"><b>Salade végétarienne</b><span class="price">5 000 F</span></div><div class="qty-controls"><button class="btn-qty" onclick="changeQty('Salade-végétarienne', 5000, -1)">-</button><span class="qty-val" id="qty-Salade-végétarienne">0</span><button class="btn-qty" onclick="changeQty('Salade-végétarienne', 5000, 1)">+</button></div></div>
+    </div>
+
+    <!-- BARBECUE -->
+    <button class="collapsible">🔥 PLATS AU BARBECUE</button>
+    <div class="content">
+        <script>
+            [['Cailles braisées', 10000], ['Langouste grillée', 23000], ['Lapin braisé', 18000], ['Pintade braisée', 18000], ['Poulet braisé', 10000], ['Sandwich Poulet', 3000], ['Sandwich Thon', 3000]].forEach(item => {
+                let id = item[0].replace(/\s+/g, '-');
+                document.write(`<div class="card"><div class="info"><b>${item[0]}</b><span class="price">${item[1].toLocaleString()} F</span></div><div class="qty-controls"><button class="btn-qty" onclick="changeQty('${id}', ${item[1]}, -1)">-</button><span class="qty-val" id="qty-${id}">0</span><button class="btn-qty" onclick="changeQty('${id}', ${item[1]}, 1)">+</button></div></div>`);
+            });
+        </script>
+    </div>
+
+    <!-- PÂTES & SOUPE -->
+    <button class="collapsible">🍝 PÂTES & SOUPE</button>
+    <div class="content">
+        <script>
+            [['Soupe Poisson', 10000], ['Soupe Poulet', 10000], ['Spaghettis aux écrevisses', 13000], ['Spaghettis Carbonara', 10000]].forEach(item => {
+                let id = item[0].replace(/\s+/g, '-');
+                document.write(`<div class="card"><div class="info"><b>${item[0]}</b><span class="price">${item[1].toLocaleString()} F</span></div><div class="qty-controls"><button class="btn-qty" onclick="changeQty('${id}', ${item[1]}, -1)">-</button><span class="qty-val" id="qty-${id}">0</span><button class="btn-qty" onclick="changeQty('${id}', ${item[1]}, 1)">+</button></div></div>`);
+            });
+        </script>
+    </div>
+
+    <!-- BROCHETTES -->
+    <button class="collapsible">🍢 LES BROCHETTES</button>
+    <div class="content">
+        <script>
+            [['Brochette de poisson', 10000], ['Brochette de poulet', 10000], ['Brochettes escargots', 10000], ['Brochettes bœuf', 10000], ['Brochettes gambas', 20000], ['Brochettes gésiers', 8000]].forEach(item => {
+                let id = item[0].replace(/\s+/g, '-');
+                document.write(`<div class="card"><div class="info"><b>${item[0]}</b><span class="price">${item[1].toLocaleString()} F</span></div><div class="qty-controls"><button class="btn-qty" onclick="changeQty('${id}', ${item[1]}, -1)">-</button><span class="qty-val" id="qty-${id}">0</span><button class="btn-qty" onclick="changeQty('${id}', ${item[1]}, 1)">+</button></div></div>`);
+            });
+        </script>
+    </div>
+
+    <!-- GARNITURES -->
+    <button class="collapsible">🍚 GARNITURES</button>
+    <div class="content">
+        <script>
+            [['Alloco', 1000], ['Attiéké', 500], ['Attiéké huile rouge', 1000], ['Frites ignames', 1000], ['Frites pommes', 1000], ['Riz', 1000]].forEach(item => {
+                let id = item[0].replace(/\s+/g, '-');
+                document.write(`<div class="card"><div class="info"><b>${item[0]}</b><span class="price">${item[1].toLocaleString()} F</span></div><div class="qty-controls"><button class="btn-qty" onclick="changeQty('${id}', ${item[1]}, -1)">-</button><span class="qty-val" id="qty-${id}">0</span><button class="btn-qty" onclick="changeQty('${id}', ${item[1]}, 1)">+</button></div></div>`);
+            });
+        </script>
+    </div>
+
+    <!-- BOISSONS -->
+    <button class="collapsible">🥤 BOISSONS</button>
+    <div class="content">
+        <div class="card"><div class="info"><b>Eau</b><span class="price">500 F</span></div><div class="qty-controls"><button class="btn-qty" onclick="changeQty('Eau', 500, -1)">-</button><span class="qty-val" id="qty-Eau">0</span><button class="btn-qty" onclick="changeQty('Eau', 500, 1)">+</button></div></div>
+        <div class="card"><div class="info"><b>Sucrerie</b><span class="price">1 000 F</span></div><div class="qty-controls"><button class="btn-qty" onclick="changeQty('Sucrerie-1000', 1000, -1)">-</button><span class="qty-val" id="qty-Sucrerie-1000">0</span><button class="btn-qty" onclick="changeQty('Sucrerie-1000', 1000, 1)">+</button></div></div>
+        <div class="card"><div class="info"><b>Sucrerie Spéciale</b><span class="price">1 500 F</span></div><div class="qty-controls"><button class="btn-qty" onclick="changeQty('Sucrerie-1500', 1500, -1)">-</button><span class="qty-val" id="qty-Sucrerie-1500">0</span><button class="btn-qty" onclick="changeQty('Sucrerie-1500', 1500, 1)">+</button></div></div>
+        <div class="card"><div class="info"><b>Bière Classique</b><span class="price">1 000 F</span></div><div class="qty-controls"><button class="btn-qty" onclick="changeQty('Biere-1000', 1000, -1)">-</button><span class="qty-val" id="qty-Biere-1000">0</span><button class="btn-qty" onclick="changeQty('Biere-1000', 1000, 1)">+</button></div></div>
+        <div class="card"><div class="info"><b>Bière Spéciale</b><span class="price">2 000 F</span></div><div class="qty-controls"><button class="btn-qty" onclick="changeQty('Biere-2000', 2000, -1)">-</button><span class="qty-val" id="qty-Biere-2000">0</span><button class="btn-qty" onclick="changeQty('Biere-2000', 2000, 1)">+</button></div></div>
+        <div class="card"><div class="info"><b>Vins</b><span class="price">À partir de 8 000 F</span></div><div class="qty-controls"><button class="btn-qty" onclick="changeQty('Vins', 8000, -1)">-</button><span class="qty-val" id="qty-Vins">0</span><button class="btn-qty" onclick="changeQty('Vins', 8000, 1)">+</button></div></div>
+        <div class="card"><div class="info"><b>Liqueurs</b><span class="price">À partir de 10 000 F</span></div><div class="qty-controls"><button class="btn-qty" onclick="changeQty('Liqueurs', 10000, -1)">-</button><span class="qty-val" id="qty-Liqueurs">0</span><button class="btn-qty" onclick="changeQty('Liqueurs', 10000, 1)">+</button></div></div>
+        <div class="card"><div class="info"><b>Champagne</b><span class="price">À partir de 50 000 F</span></div><div class="qty-controls"><button class="btn-qty" onclick="changeQty('Champagne', 50000, -1)">-</button><span class="qty-val" id="qty-Champagne">0</span><button class="btn-qty" onclick="changeQty('Champagne', 50000, 1)">+</button></div></div>
+    </div>
+
+    <!-- LOISIRS -->
+    <button class="collapsible">🚤 ACTIVITÉS LAGUNAIRES</button>
+    <div class="content">
+        <div class="card"><div class="info"><b>Balade Lagunaire</b><span class="price">10 000 F/pers</span></div><div class="qty-controls"><button class="btn-qty" onclick="changeQty('Balade', 10000, -1)">-</button><span class="qty-val" id="qty-Balade">0</span><button class="btn-qty" onclick="changeQty('Balade', 10000, 1)">+</button></div></div>
+        <div class="card"><div class="info"><b>Jet-Ski</b><span class="price">1 500 F/min</span></div><div class="qty-controls"><button class="btn-qty" onclick="changeQty('Jet-Ski', 1500, -1)">-</button><span class="qty-val" id="qty-Jet-Ski">0</span><button class="btn-qty" onclick="changeQty('Jet-Ski', 1500, 1)">+</button></div></div>
+        <div class="card"><div class="info"><b>Bouée-Tractée</b><span class="price">1 500 F/min</span></div><div class="qty-controls"><button class="btn-qty" onclick="changeQty('Bouee-Tractee', 1500, -1)">-</button><span class="qty-val" id="qty-Bouee-Tractee">0</span><button class="btn-qty" onclick="changeQty('Bouee-Tractee', 1500, 1)">+</button></div></div>
+        <div class="card"><div class="info"><b>Traversée Lagunaire (A/R)</b><span class="price">3 000 F/pers</span></div><div class="qty-controls"><button class="btn-qty" onclick="changeQty('Traversee', 3000, -1)">-</button><span class="qty-val" id="qty-Traversee">0</span><button class="btn-qty" onclick="changeQty('Traversee', 3000, 1)">+</button></div></div>
+        <div class="card"><div class="info"><b>Bateau de Luxe</b><span class="price">À partir de 150 000 F</span></div><div class="qty-controls"><button class="btn-qty" onclick="changeQty('Bateau-Luxe', 150000, -1)">-</button><span class="qty-val" id="qty-Bateau-Luxe">0</span><button class="btn-qty" onclick="changeQty('Bateau-Luxe', 150000, 1)">+</button></div></div>
+    </div>
+
+    <div class="payment-box">
+        <p><b>MOOV MONEY & WAVE :</b> <span class="phone-num">01 01 30 05 28</span></p>
+        <p><b>ORANGE MONEY :</b> <span class="phone-num">07 88 74 77 66</span></p>
+    </div>
+</div>
+
+<div class="order-bar">
+    <div>Total: <b id="total-amount">0</b> F</div>
+    <button class="btn-validate" onclick="validerCommande()">Commander ✅</button>
+</div>
+
+<script>
+    // --- SCRIPT POUR L'IMAGE DYNAMIQUE DU HEADER ---
+    const imagesFood = [
+        'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1000&q=80', // Grillades
+        'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=1000&q=80', // Brochettes
+        'https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=1000&q=80', // Plat restaurant
+        'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=1000&q=80', // Poisson/Assiette
+        'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1000&q=80', // Restaurant classe
+        'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&w=1000&q=80', // Boissons/Cocktails
+        'https://images.unsplash.com/photo-1594041680534-e8c8cdebd679?auto=format&fit=crop&w=1000&q=80'  // Langouste/Fruits de mer
+    ];
+
+    function setRandomHeader() {
+        const header = document.getElementById('dynamic-header');
+        const randomImg = imagesFood[Math.floor(Math.random() * imagesFood.length)];
+        header.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('${randomImg}')`;
+    }
+    
+    // Exécuter au chargement
+    setRandomHeader();
+
+    // Accordéon
+    var coll = document.getElementsByClassName("collapsible");
+    for (let i = 0; i < coll.length; i++) {
+        coll[i].addEventListener("click", function() {
+            this.classList.toggle("active");
+            var content = this.nextElementSibling;
+            content.style.maxHeight = content.style.maxHeight ? null : content.scrollHeight + "px";
+        });
+    }
+
+    let panier = {};
+    let totalGlobal = 0;
+
+    function changeQty(id, prix, delta) {
+        if (!panier[id]) panier[id] = { qty: 0, prix: prix };
+        panier[id].qty += delta;
+        if (panier[id].qty < 0) panier[id].qty = 0;
+        document.getElementById("qty-" + id).innerText = panier[id].qty;
+        
+        totalGlobal = 0;
+        for (let key in panier) totalGlobal += panier[key].qty * panier[key].prix;
+        document.getElementById('total-amount').innerText = totalGlobal.toLocaleString();
+    }
+
+    function validerCommande() {
+        if (totalGlobal === 0) return alert("Panier vide !");
+        let frais = 2500;
+        let msg = "📄 *REÇU ASSINIE MAFIA*\n---\n";
+        for (let id in panier) {
+            if (panier[id].qty > 0) {
+                let unit = (id === "Jet-Ski" || id === "Bouee-Tractee") ? " min" : (id === "Balade" || id === "Traversee") ? " pers" : "";
+                msg += `▪️ ${id.replace(/-/g,' ')} (x${panier[id].qty}${unit}) : ${(panier[id].qty*panier[id].prix).toLocaleString()} F\n`;
+            }
+        }
+        msg += `---\n*Sous-total :* ${totalGlobal.toLocaleString()} F\n*Livraison :* ${frais.toLocaleString()} F\n*TOTAL : ${(totalGlobal+frais).toLocaleString()} FCFA*\n---\n⚠️ *AUCUN REMBOURSEMENT POSSIBLE*\n📌 Payez sur 0101300528 (Wave/Moov) ou 0788747766 (Orange).`;
+        window.open("https://wa.me/2250101300528?text=" + encodeURIComponent(msg));
+    }
+</script>
+
+</body>
+</html>
