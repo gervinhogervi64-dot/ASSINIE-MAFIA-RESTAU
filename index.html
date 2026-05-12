@@ -216,7 +216,7 @@
 
     <div class="payment-box">
         <p><b>SCANNEZ POUR PAYER (WAVE)</b></p>
-        <img src="wavescan.jpg" alt="QR Code Paiement" class="qr-code" onerror="this.src='image_d4d056.jpg'">
+        <img src="wavescan.jpg" alt="QR Code" class="qr-code" onerror="this.src='image_d4d056.jpg'">
         <p><b>ORANGE MONEY :</b> <span class="phone-num">07 49 50 61 57</span></p>
         <p><b>MOOV & WAVE :</b> <span class="phone-num">01 01 30 05 28</span></p>
     </div>
@@ -237,6 +237,7 @@
         'cat-nautique': [['Jet-Ski (1 min)', 1500], ['Balade lagunaire /pers', 15000], ['Traversée A/R /pers', 4000], ['Bateau de luxe /pers', 150000]]
     };
 
+    // Génération automatique du menu
     Object.keys(menuData).forEach(catId => {
         const container = document.getElementById(catId);
         menuData[catId].forEach(item => {
@@ -245,12 +246,17 @@
         });
     });
 
+    // Gestion de l'accordéon
     var coll = document.getElementsByClassName("collapsible");
     for (let i = 0; i < coll.length; i++) {
         coll[i].addEventListener("click", function() {
             this.classList.toggle("active");
             var content = this.nextElementSibling;
-            content.style.maxHeight = content.style.maxHeight ? null : content.scrollHeight + "px";
+            if (content.style.maxHeight) {
+                content.style.maxHeight = null;
+            } else {
+                content.style.maxHeight = content.scrollHeight + "px";
+            }
         });
     }
 
@@ -262,32 +268,37 @@
         panier[id].qty += delta;
         if (panier[id].qty < 0) panier[id].qty = 0;
         document.getElementById("qty-" + id).innerText = panier[id].qty;
+        
         totalGlobal = 0;
-        for (let key in panier) totalGlobal += panier[key].qty * panier[key].prix;
+        for (let key in panier) {
+            totalGlobal += panier[key].qty * panier[key].prix;
+        }
         document.getElementById('total-amount').innerText = totalGlobal.toLocaleString();
     }
 
     function validerCommande() {
-        if (totalGlobal === 0) return alert("Votre panier est vide !");
+        if (totalGlobal === 0) {
+            alert("Votre panier est vide !");
+            return;
+        }
+        
         let frais = 2500;
         let msg = "🛒 *NOUVELLE COMMANDE - ASSINIE MAFIA*\n---\n";
         for (let id in panier) {
-            if (panier[id].qty > 0) msg += `▪️ ${id.replace(/-/g,' ')} (x${panier[id].qty}) : ${(panier[id].qty*panier[id].prix).toLocaleString()} F\n`;
+            if (panier[id].qty > 0) {
+                msg += "▪️ " + id.replace(/-/g,' ') + " (x" + panier[id].qty + ") : " + (panier[id].qty*panier[id].prix).toLocaleString() + " F\n";
+            }
         }
-        msg += `---\n*TOTAL À PAYER : ${(totalGlobal+frais).toLocaleString()} FCFA* (Livraison incluse)\n---\n📌 Merci de confirmer sur les deux numéros.";
+        msg += "---\n*TOTAL À PAYER : " + (totalGlobal+frais).toLocaleString() + " FCFA* (Livraison incluse)\n---\n📌 Merci de confirmer sur les deux numéros.";
         
         const urlOrange = "https://wa.me/2250749506157?text=" + encodeURIComponent(msg);
         const urlMoov = "https://wa.me/2250101300528?text=" + encodeURIComponent(msg);
 
-        // 1. Ouvre Orange immédiatement
+        // Étape 1 : Ouvrir Orange
         window.open(urlOrange, '_blank');
 
-        // 2. Force l'ouverture du second après validation de l'alerte
-        setTimeout(() => {
-            alert("⚠️ ÉTAPE FINALE : Cliquez sur OK pour envoyer la copie de sécurité au service de livraison (MOOV/WAVE).");
+        // Étape 2 : Forcer Moov après confirmation
+        setTimeout(function() {
+            alert("⚠️ ÉTAPE FINALE : Cliquez sur OK pour envoyer la COPIE DE SÉCURITÉ au service de livraison (MOOV/WAVE).");
             window.open(urlMoov, '_blank');
-        }, 1500);
-    }
-</script>
-</body>
-</html>
+        }, 15
