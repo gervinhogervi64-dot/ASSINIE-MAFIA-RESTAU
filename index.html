@@ -12,6 +12,7 @@
             --success: #27ae60;
             --warning: #d35400;
             --danger: #e74c3c;
+            --nautique: #2980b9;
         }
 
         body {
@@ -89,6 +90,9 @@
             align-items: center;
             box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
+
+        /* Couleur spécifique pour le nautique */
+        .btn-nautique { border-left-color: var(--nautique); }
 
         .active, .collapsible:hover { background-color: #f1f1f1; }
         .collapsible:after { content: '\002B'; color: var(--accent); font-weight: bold; font-size: 20px; }
@@ -205,6 +209,10 @@
         ⚠️ AUCUN REMBOURSEMENT N'EST POSSIBLE APRÈS AVOIR PASSÉ UNE COMMANDE ET PAYÉ PAR TRANSACTION.
     </div>
 
+    <!-- Section Nautique Ajoutée -->
+    <button class="collapsible btn-nautique">🌊 ACTIVITÉS NAUTIQUES</button>
+    <div class="content" id="cat-nautique"></div>
+
     <button class="collapsible">🥗 ENTRÉES</button>
     <div class="content">
         <div class="card"><div class="info"><b>Salade composée (Poulet/Thon)</b><span class="price">5 000 F</span></div><div class="qty-controls"><button class="btn-qty" onclick="changeQty('Salade-composée', 5000, -1)">-</button><span class="qty-val" id="qty-Salade-composée">0</span><button class="btn-qty" onclick="changeQty('Salade-composée', 5000, 1)">+</button></div></div>
@@ -238,6 +246,7 @@
 
 <script>
     const menuData = {
+        'cat-nautique': [['Jet-Ski (1 min)', 1500], ['Balade lagunaire /pers', 15000], ['Traversée A/R /pers', 4000], ['Bateau de luxe (Dès)', 150000]],
         'cat-barbecue': [['Cailles braisées', 10000], ['Langouste grillée', 23000], ['Lapin braisé', 18000], ['Pintade braisée', 18000], ['Poulet braisé', 10000], ['Sandwich Poulet', 3000], ['Sandwich Thon', 3000]],
         'cat-pates': [['Soupe Poisson', 10000], ['Soupe Poulet', 10000], ['Spaghettis aux écrevisses', 13000], ['Spaghettis Carbonara', 10000]],
         'cat-garnitures': [['Alloco', 1000], ['Attiéké', 500], ['Attiéké huile rouge', 1000], ['Frites ignames', 1000], ['Frites pommes', 1000], ['Riz', 1000]],
@@ -247,7 +256,7 @@
     Object.keys(menuData).forEach(catId => {
         const container = document.getElementById(catId);
         menuData[catId].forEach(item => {
-            let id = item[0].replace(/\s+/g, '-');
+            let id = item[0].replace(/\s+/g, '-').replace(/\//g, '');
             container.innerHTML += `<div class="card"><div class="info"><b>${item[0]}</b><span class="price">${item[1].toLocaleString()} F</span></div><div class="qty-controls"><button class="btn-qty" onclick="changeQty('${id}', ${item[1]}, -1)">-</button><span class="qty-val" id="qty-${id}">0</span><button class="btn-qty" onclick="changeQty('${id}', ${item[1]}, 1)">+</button></div></div>`;
         });
     });
@@ -270,7 +279,11 @@
         coll[i].addEventListener("click", function() {
             this.classList.toggle("active");
             var content = this.nextElementSibling;
-            content.style.maxHeight = content.style.maxHeight ? null : content.scrollHeight + "px";
+            if (content.style.maxHeight) {
+                content.style.maxHeight = null;
+            } else {
+                content.style.maxHeight = content.scrollHeight + "px";
+            }
         });
     }
 
@@ -290,6 +303,9 @@
 
     function validerCommande() {
         if (totalGlobal === 0) return alert("Votre panier est vide !");
+        
+        // On ne rajoute les frais de livraison que si un plat (nourriture) est commandé ? 
+        // Pour simplifier, on garde 2500 F comme configuré précédemment.
         let frais = 2500;
         let msg = "🛒 *NOUVELLE COMMANDE - ASSINIE MAFIA*\n---\n";
         for (let id in panier) {
@@ -297,7 +313,7 @@
                 msg += `▪️ ${id.replace(/-/g,' ')} (x${panier[id].qty}) : ${(panier[id].qty*panier[id].prix).toLocaleString()} F\n`;
             }
         }
-        msg += `---\n*Sous-total :* ${totalGlobal.toLocaleString()} F\n*Livraison :* ${frais.toLocaleString()} F\n*TOTAL À PAYER : ${(totalGlobal+frais).toLocaleString()} FCFA*\n---\n⚠️ *AUCUN REMBOURSEMENT POSSIBLE*\n📌 Règlement via Wave/Moov (0101300528) ou Orange (0788747766).`;
+        msg += `---\n*Sous-total :* ${totalGlobal.toLocaleString()} F\n*Livraison/Service :* ${frais.toLocaleString()} F\n*TOTAL À PAYER : ${(totalGlobal+frais).toLocaleString()} FCFA*\n---\n⚠️ *AUCUN REMBOURSEMENT POSSIBLE*\n📌 Règlement via Wave/Moov (0101300528) ou Orange (0788747766).`;
         window.open("https://wa.me/2250101300528?text=" + encodeURIComponent(msg));
     }
 </script>
