@@ -53,7 +53,6 @@
             background-position: center;
             color: white;
             border-bottom: 5px solid var(--accent);
-            transition: background 0.5s ease-in-out;
         }
 
         .container { max-width: 800px; margin: auto; padding: 10px; }
@@ -91,7 +90,6 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
 
-        /* Couleur spécifique pour le nautique */
         .btn-nautique { border-left-color: var(--nautique); }
 
         .active, .collapsible:hover { background-color: #f1f1f1; }
@@ -172,51 +170,40 @@
             border-radius: 15px;
             margin: 20px 0;
             text-align: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
         }
 
         .qr-code {
-            width: 180px;
+            width: 200px;
             height: auto;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
             border-radius: 10px;
-            border: 1px solid #eee;
         }
 
-        .phone-num {
-            color: #000;
-            font-weight: 900;
-            font-size: 1.1rem;
-        }
+        .phone-num { font-weight: 900; font-size: 1.1rem; }
     </style>
 </head>
 <body>
 
 <div class="marquee-container">
     <div class="marquee-text">
-        🛵 LIVRAISON : Dès 2 500 F — COMMANDE VALIDÉE APRÈS PAIEMENT — AUCUN REMBOURSEMENT POSSIBLE — WAVE/MOOV : 0101300528 — ORANGE : 0788747766
+        🛵 LIVRAISON : Dès 2 500 F — COMMANDE VALIDÉE APRÈS PAIEMENT — WAVE/MOOV : 0101300528 — ORANGE : 0788747766
     </div>
 </div>
 
-<header id="dynamic-header">
+<header>
     <h1 style="text-shadow: 2px 2px 4px rgba(0,0,0,0.8);">🌴 ASSINIE MAFIA</h1>
-    <p style="text-shadow: 1px 1px 2px rgba(0,0,0,0.8); font-weight: bold; font-size: 1.2rem;">Vos envies n’attendent pas : cliquez, commandez, savourez.</p>
+    <p style="font-weight: bold; font-size: 1.2rem;">Vos envies n’attendent pas : cliquez, commandez, savourez.</p>
 </header>
 
 <div class="container">
+    <div class="no-refund">⚠️ AUCUN REMBOURSEMENT POSSIBLE APRÈS PAIEMENT.</div>
 
-    <div class="no-refund">
-        ⚠️ AUCUN REMBOURSEMENT N'EST POSSIBLE APRÈS AVOIR PASSÉ UNE COMMANDE ET PAYÉ PAR TRANSACTION.
-    </div>
-
-    <!-- Section Nautique Ajoutée -->
     <button class="collapsible btn-nautique">🌊 ACTIVITÉS NAUTIQUES</button>
     <div class="content" id="cat-nautique"></div>
 
     <button class="collapsible">🥗 ENTRÉES</button>
-    <div class="content">
+    <div class="content" id="cat-entrees">
         <div class="card"><div class="info"><b>Salade composée (Poulet/Thon)</b><span class="price">5 000 F</span></div><div class="qty-controls"><button class="btn-qty" onclick="changeQty('Salade-composée', 5000, -1)">-</button><span class="qty-val" id="qty-Salade-composée">0</span><button class="btn-qty" onclick="changeQty('Salade-composée', 5000, 1)">+</button></div></div>
-        <div class="card"><div class="info"><b>Salade végétarienne</b><span class="price">5 000 F</span></div><div class="qty-controls"><button class="btn-qty" onclick="changeQty('Salade-végétarienne', 5000, -1)">-</button><span class="qty-val" id="qty-Salade-végétarienne">0</span><button class="btn-qty" onclick="changeQty('Salade-végétarienne', 5000, 1)">+</button></div></div>
     </div>
 
     <button class="collapsible">🔥 PLATS AU BARBECUE</button>
@@ -233,9 +220,9 @@
 
     <div class="payment-box">
         <p><b>SCANNEZ POUR PAYER (WAVE)</b></p>
-        <img src="image_d543fe.jpg" alt="QR Code Paiement" class="qr-code">
-        <p><b>MOOV MONEY & WAVE :</b> <span class="phone-num">01 01 30 05 28</span></p>
-        <p><b>ORANGE MONEY :</b> <span class="phone-num">07 88 74 77 66</span></p>
+        <img src="qr-wave.jpg" alt="QR Code Paiement" class="qr-code">
+        <p><b>MOOV & WAVE :</b> <span class="phone-num">01 01 30 05 28</span></p>
+        <p><b>ORANGE :</b> <span class="phone-num">07 88 74 77 66</span></p>
     </div>
 </div>
 
@@ -261,29 +248,12 @@
         });
     });
 
-    const imagesFood = [
-        'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1000&q=80',
-        'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=1000&q=80',
-        'https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=1000&q=80'
-    ];
-
-    function setRandomHeader() {
-        const header = document.getElementById('dynamic-header');
-        const randomImg = imagesFood[Math.floor(Math.random() * imagesFood.length)];
-        header.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('${randomImg}')`;
-    }
-    setRandomHeader();
-
     var coll = document.getElementsByClassName("collapsible");
     for (let i = 0; i < coll.length; i++) {
         coll[i].addEventListener("click", function() {
             this.classList.toggle("active");
             var content = this.nextElementSibling;
-            if (content.style.maxHeight) {
-                content.style.maxHeight = null;
-            } else {
-                content.style.maxHeight = content.scrollHeight + "px";
-            }
+            content.style.maxHeight = content.style.maxHeight ? null : content.scrollHeight + "px";
         });
     }
 
@@ -295,7 +265,6 @@
         panier[id].qty += delta;
         if (panier[id].qty < 0) panier[id].qty = 0;
         document.getElementById("qty-" + id).innerText = panier[id].qty;
-        
         totalGlobal = 0;
         for (let key in panier) totalGlobal += panier[key].qty * panier[key].prix;
         document.getElementById('total-amount').innerText = totalGlobal.toLocaleString();
@@ -303,20 +272,14 @@
 
     function validerCommande() {
         if (totalGlobal === 0) return alert("Votre panier est vide !");
-        
-        // On ne rajoute les frais de livraison que si un plat (nourriture) est commandé ? 
-        // Pour simplifier, on garde 2500 F comme configuré précédemment.
         let frais = 2500;
-        let msg = "🛒 *NOUVELLE COMMANDE - ASSINIE MAFIA*\n---\n";
+        let msg = "🛒 *COMMANDE - ASSINIE MAFIA*\n---\n";
         for (let id in panier) {
-            if (panier[id].qty > 0) {
-                msg += `▪️ ${id.replace(/-/g,' ')} (x${panier[id].qty}) : ${(panier[id].qty*panier[id].prix).toLocaleString()} F\n`;
-            }
+            if (panier[id].qty > 0) msg += `▪️ ${id.replace(/-/g,' ')} (x${panier[id].qty})\n`;
         }
-        msg += `---\n*Sous-total :* ${totalGlobal.toLocaleString()} F\n*Livraison/Service :* ${frais.toLocaleString()} F\n*TOTAL À PAYER : ${(totalGlobal+frais).toLocaleString()} FCFA*\n---\n⚠️ *AUCUN REMBOURSEMENT POSSIBLE*\n📌 Règlement via Wave/Moov (0101300528) ou Orange (0788747766).`;
+        msg += `---\n*TOTAL À PAYER : ${(totalGlobal+frais).toLocaleString()} FCFA* (Livraison incluse)\n---\n📌 Règlement via Wave/Moov (0101300528) ou Orange (0788747766).`;
         window.open("https://wa.me/2250101300528?text=" + encodeURIComponent(msg));
     }
 </script>
-
 </body>
 </html>
